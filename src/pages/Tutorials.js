@@ -1,33 +1,49 @@
 import React from 'react';
+import ReactPlayer from 'react-player';
+import { Lectures } from '../components/TutorialsData';
+import TextFileReader from '../components/textFileReader.js';
+
 
 export function Tutorials() {
   return (
     <div className='tutorials'>
-      <h1>Reports</h1>
+      <h1 className='titleStyle'>Introduction</h1>
+      <div className='textStyle'>
+        text
+      </div>
     </div>
   );
 }
 
-export const T1 = () => {
+export function T1(props) {
+  console.log(process.env.PUBLIC_URL +'/videos/video1.avi')
+  var i = props.i
+  console.log(i)
+
   return (
-    <div className='tutorials'>
-      <h1>Tutorials/t1</h1>
+    <div className='tutorialsStyle'>
+      <h1 className='titleStyle'>
+          {Lectures[i].name}
+      </h1>
+
+      <div className='textStyle'>
+        {Lectures[i].text}
+      </div>
+
+      <div className='playerStyle'>
+      <ReactPlayer url={'/videos/video1.mp4'}
+        height='50vh'
+        width='60vh'
+        controls={true}/>
+      </div>
+          
+      <div className='terminalHeader'>Python
+      <button className='button'>Copy</button>
+      </div>
+      <TextFileReader txt={'/codes/code1.py'} />
     </div>
-  );
+    );
 };
 
-export const T2 = () => {
-  return (
-    <div className='tutorials'>
-      <h1>Tutorials/t2</h1>
-    </div>
-  );
-};
 
-export const T3 = () => {
-  return (
-    <div className='tutorials'>
-      <h1>Tutorials/t3</h1>
-    </div>
-  );
-};
+

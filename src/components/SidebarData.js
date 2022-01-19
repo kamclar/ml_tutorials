@@ -12,7 +12,7 @@ export const SidebarData = [
     iconOpened: <RiIcons.RiArrowUpSFill />,
   },
   {
-    title: 'Tutorials',
+    title: 'DICH ML tutorials',
     path: '/tutorials',
     icon: <IoIcons.IoIosPaper />,
     iconClosed: <RiIcons.RiArrowDownSFill />,
@@ -20,20 +20,45 @@ export const SidebarData = [
 
     subNav: [
       {
-        title: 't1',
+        title: 'Exploratory analysis',
         path: '/tutorials/t1',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
       },
       {
-        title: 't2',
+        title: 'Data preprocessing',
         path: '/tutorials/t2',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
       },
       {
-        title: 't3',
+        title: 'Classification vs Regression',
         path: '/tutorials/t3',
+        icon: <IoIcons.IoIosPaper />
+      },
+      {
+        title: 'Data Preprocessing',
+        path: '/tutorials/t4',
+        icon: <IoIcons.IoIosPaper />
+      },
+      {
+        title: 'Models',
+        path: '/tutorials/t5',
+        icon: <IoIcons.IoIosPaper />
+      },
+      {
+        title: 'Metrics',
+        path: '/tutorials/t6',
+        icon: <IoIcons.IoIosPaper />
+      },
+      {
+        title: 'Applicability Domain',
+        path: '/tutorials/t7',
+        icon: <IoIcons.IoIosPaper />
+      },
+      {
+        title: 'Results Presentation',
+        path: '/tutorials/t8',
         icon: <IoIcons.IoIosPaper />
       }
     ]
