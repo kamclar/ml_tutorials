@@ -32,11 +32,12 @@ export function T1(props) {
 
       <div className='playerStyle'>
       <ReactPlayer url={'/videos/video1.mp4'}
-        height='50vh'
-        width='60vh'
+        height='80%'
+        width='100%'
         controls={true}/>
       </div>
-          
+      <iframe src="https://trinket.io/embed/python/3d8d7ce66b" width="100%" height="356" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe>
+      
       <div className='terminalHeader'>Python
       <button className='button'>Copy</button>
       </div>

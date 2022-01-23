@@ -23,14 +23,16 @@
 }
 
 .playerStyle {
-  margin-left: 5vh;
+  display: block;
+
   padding-bottom: 3em;
 
 }
 
 .textStyle {
+  font-family: 'Lato', sans-serif;
   font-size: 18px;  
-  text-align: center;
+  text-align: left;
   padding-bottom: 2em;
 }
 
