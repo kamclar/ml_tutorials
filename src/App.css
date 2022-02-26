@@ -35,6 +35,31 @@
   padding-bottom: 2em;
 }
 
+.textStyleHeader {
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+  font-size: 30px;  
+  text-align: center;
+  padding-bottom: 2em;
+}
+
+.textStyleHeader2 {
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+  font-size: 20px;  
+  text-align: left;
+  padding-bottom: 2em;
+}
+
+.textStyleCode {
+  font-family: 'Lato', sans-serif;
+  font-weight: normal;
+  font-size: 18px;  
+  text-align: left;
+  padding-left: 2em;
+  background: rgb(224, 222, 222);
+}
+
 .terminalHeader {
   height: 2em;
   color: rgb(0, 0, 0);

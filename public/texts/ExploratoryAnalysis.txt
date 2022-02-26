@@ -1,0 +1,22 @@
+#Exploratorní analýza
+Exploratorní analýza (EA) slouží k prozkoumání dat, se kterými chceme pracovat. Abychom byli schopni tvořit funkční modely, ať už regresní či klasifikační, musíme se s daty podrobně seznámit. Zajímá nás, kolik máme k dispozici datových bodů a jak tyto body vypadají, neboli chceme znát počet řádků a sloupců. Zajímají nás anomálie, odlehlé body (outliery); veškerá statistika, kterou o datech můžeme získat, je důležitá pro náš další postup. K tomu nám slouží množství statistických nástrojů v podobě pythonovských knihoven. Velmi důležitou složkou je i vizualizace dat ‒ většinou z číselné reprezentace datasetu není možné odhalit skutečnosti a vztahy, které jsou z grafického vyobrazení zjevné na první pohled.
+Základem pro EA je vhodné uložení dat do tabulkové reprezentace. Budeme používat knihovnu Pandas, která sama o sobě obsahuje množství příkazů, jejichž výstupem jsou shrnující statistiky a grafická zobrazení. Uvedeme zde jen nezbytné základy, každý dataset je ale jiný a je třeba s ním i jinak zacházet, proto si vyhraďte čas na prozkoumání svých dat i dalšími způsoby, než bude uvedeno v následujících příkladech.
+##Základní popis datasetu
+&Počet řádků a sloupců:  .shape()
+&Datové typy:    .info()
+&Sumární statistika:    .describe()
+&Počet unikátních hodnot:    .value_counts()
+
+##Vizualizace
+&Korelace:   .corr()
+
+Používáme Pearsonovu korelaci, která pomůže odhalit lineární korelaci v datech. Čím tmavší barva, tím vyšší hodnota korelace; pokud nastavíme “annot=True”, označíme korelovaná data. Pokud jde o vlastnosti (features), které budeme používat k popisu datových bodů, je vhodné korelované sloupce odstranit, či sloučit do nové proměnné. Obzvlášť pokud budeme používat lineární regresi. 
+&Boxplot:    .boxplot()
+&Histogram:  .hist()
+
+##Datový prostor
+V případě, že pracujeme s molekulami, můžeme chemický prostor datasetu zobrazit pomocí redukce dat do dvou souřadnic a následného vykreslení dat do 2D grafu, kde osa x zobrazuje první souřadnici a osa y druhou souřadnici. Základem pro redukci dat jsou algoritmy PCA (lineární) a t-SNE (nelineární). U PCA nezapomínejte na to, že první dvě komponenty obsahují pouze určité procento vysvětlené variance dat, čili vzniklý graf není informačně vyčerpávající. Těchto algoritmů je mnoho, nebojte se vyzkoušet i další možnosti. Získaný graf můžeme například obarvit pomocí tříd, které naše data obsahují, a podívat se, zda neuvidíme zajímavé shlukování datových bodů. Data lze obarvovat různými způsoby, nebojte se experimentovat. 
+Dále můžeme vidět i outliery; pokud vám nějaký datový bod prijde neobvyklý, prozkoumejte ho! Pokuste se datům porozumět, teprve tehdy můžete s daty pracovat a přicházet s nápady a vylepšeními.
+Příkladem, k čemu může sloužit vizualizace dat pomocí PCA redukce dat, je například výběr vhodného predikčního algoritmu. Pokud už na 2D PCA plotu uvidíte shluky, které odpovídají třídám ve vašich datech, budete vybírat lineární typy modelů, vzhledem k tomu, že PCA je lineární algoritmus transformace dat.
+##Zobrazení struktur
+&RDKit: mols2grid.display()

@@ -33,33 +33,26 @@ class TextFileReader extends React.Component {
     return (
       <>
         {this.state.text.split("\n").map((item, key) => {
-          if (item.startsWith('&'))
-          return (              
-            <div className="textStyleCode">                
-            {item.substr(1)} 
+          if (key < 10) key = ' '+key;
+          
+          if (key % 2 === 0) 
+            return (   
+            <>        
+            <div className="terminal">                
+              {key} {''} {item}<br />
             </div>
-            )
-          if (item.startsWith('##'))
-            return (              
-              <div className="textStyleHeader2">                
-              {item.substr(2)} 
-              </div>
-              )
-          if (item.startsWith('#'))
-            return (               
-              <div className="titleStyle">             
-              {item.substr(1)} 
-              </div>
-              )
-          else              
-              return(                 
-                <div className="textStyle">                
-                {item} 
-                </div>
-              )
+            </>     
+          )
+          else
+          return (   
+            <>      
+            <div className="terminal-odd">                
+              {key}{''} {item}<br />
+            </div>
+            </>
+          )
         })}
-      </>
-
+    </>
     
     )
   }

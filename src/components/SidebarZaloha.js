@@ -53,7 +53,7 @@ const Sidebar = () => {
             <FaIcons.FaBars onClick={showSidebar} />
           </NavIcon>
         </Nav>
-        <SidebarNav sidebar={sidebar} >
+        
           <SidebarWrap>
             <NavIcon to='#'>
               <AiIcons.AiOutlineClose  onClick={showSidebar}/>
@@ -66,7 +66,7 @@ const Sidebar = () => {
 
             }
           </SidebarWrap>
-        </SidebarNav>
+        
       </IconContext.Provider>
     </>
   );
