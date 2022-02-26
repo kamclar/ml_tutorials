@@ -52,7 +52,7 @@
 }
 
 .textStyleCode {
-  font-family: 'Lato', sans-serif;
+  font-family: monospace;
   font-weight: normal;
   font-size: 18px;  
   text-align: left;

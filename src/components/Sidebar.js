@@ -53,7 +53,8 @@ const Sidebar = () => {
             <FaIcons.FaBars onClick={showSidebar} />
           </NavIcon>
         </Nav>
-        <SidebarNav sidebar={sidebar} >
+        {/* sem kdyz dam showSidebar tak to zavru po kazdem kliknuti <SidebarNav sidebar={sidebar}  onClick={showSidebar}>  */}
+        <SidebarNav sidebar={sidebar} > 
           <SidebarWrap>
             <NavIcon to='#'>
               <AiIcons.AiOutlineClose  onClick={showSidebar}/>
