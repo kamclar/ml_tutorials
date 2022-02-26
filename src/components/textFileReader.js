@@ -33,6 +33,10 @@ class TextFileReader extends React.Component {
     return (
       <>
         {this.state.text.split("\n").map((item, key) => {
+          if (item.startsWith('http'))
+          return (              
+            <a href={item}>Link</a>
+            )
           if (item.startsWith('&'))
           return (              
             <div className="textStyleCode">                

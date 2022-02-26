@@ -24,6 +24,7 @@ Příkladem, k čemu může sloužit vizualizace dat pomocí PCA redukce dat, je
 ##ODKAZY:
 Visualization of chemical datasets and exploratory data analysis [Python, RDKit]
 https://insilico-notebook.com/en/chemdata-eda/
+
 Bioinformatics Project - Computational Drug Discovery [Part 2] Exploratory Data Analysis
 https://github.com/dataprofessor/code/blob/master/python/CDD_ML_Part_2_Acetylcholinesterase_Exploratory_Data_Analysis.ipynb
 
