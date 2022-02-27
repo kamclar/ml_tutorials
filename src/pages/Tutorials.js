@@ -21,8 +21,7 @@ export function T1(props) {
   console.log(i)
 
   return (
-    <div className='tutorialsStyle'>
-      
+    <div className='tutorialsStyle'>      
 
       <div className='textStyle'>
         <TextFileReader txt={'/texts/ExploratoryAnalysis.txt'} />        
@@ -30,13 +29,17 @@ export function T1(props) {
 
       <iframe frameborder="0" width="100%" height="1000px" src="https://kamclar.github.io/jl/retro/notebooks/index.html?path=pyolite/ExploratoryAnalysis.ipynb"></iframe>
 
+      <br/>
+      <br/>
+      <br/>
+      
+
       <div className='playerStyle'>
       <ReactPlayer url={'/videos/video1.mp4'}
         height='80%'
         width='100%'
         controls={true}/>
       </div>
-
       
 {/*       
 <h1 className='titleStyle'>
