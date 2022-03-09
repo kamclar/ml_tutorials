@@ -8,9 +8,13 @@ Základem pro EA je vhodné uložení dat do tabulkové reprezentace. Budeme pou
 &Počet unikátních hodnot:    .value_counts()
 
 ##Vizualizace
-&Korelace:   .corr()
+Korelační analýza popisuje sílu vztahu mezi dvojicemi pozorovaných hodnot náhodných veličin X a Y. Korelace se může týkat, jak vlastností datových bodů, tak i cílových hodnot.
+&Korelace:   .corr(method='pearson')
 
-Používáme Pearsonovu korelaci, která pomůže odhalit lineární korelaci v datech. Čím tmavší barva, tím vyšší hodnota korelace; pokud nastavíme “annot=True”, označíme korelovaná data. Pokud jde o vlastnosti (features), které budeme používat k popisu datových bodů, je vhodné korelované sloupce odstranit, či sloučit do nové proměnné. Obzvlášť pokud budeme používat lineární regresi. 
+Pomocí Pearsonova korelačního koeficientu můžeme odhalit lineární korelaci v datech. Pokud jde o vlastnosti (features), které budeme používat k popisu datových bodů, je vhodné korelované sloupce odstranit či sloučit do nové proměnné. Obzvlášť pokud budeme používat lineární regresi. 
+K odhalení nelineární korelace v datech může pomoct Spearmanův korelační koeficient; popisuje, jak moc testovaná data odpovídají monotónní funkci. Jelikož jde o neparametrickou metodu, nevyžaduje normalitu dat.
+Kendallův test pořadové korelace, používá se k popisu míry pořadí korelace. Tento test nemá žádné předpoklady o distribuci testovaných dat.
+
 &Boxplot:    .boxplot()
 &Histogram:  .hist()
 
