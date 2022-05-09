@@ -1,0 +1,100 @@
+#Míry kvality
+Součástí postupu při výběru nejlepšího modelu pro danou úlohu je hodnocení výkonu modelu pomocí některé z měr kvality. Míry kvality k hotovému modelu přiřadí číslo, s jehož pomocí je snadné modely mezi sebou porovnávat.  Pro výpočet všech měr kvality, o kterých budeme mluvit, můžeme použít knihovnu Sklearn.
+ 
+##Klasifikační metriky
+Vstupní a výstupní proměnná klasifikačních modelů je diskrétní (celé) číslo. Jde-li o binární problém, například aktivní vs. neaktivní datové body, vstup je nula a jedna. Máme-li k dispozici více než dvě třídy, jde o multiclass úlohu, pak jsou třídám přidělena čísla 0, 1… N. Případně může každý datový bod příslušet do více tříd, pak jde o multilabel problém, kde každému datovému bodu přísluší cílová proměnná (label) v podobě vektoru celých čísel.
+Základní metriky jsou stejné pro všechny tři uvedené situace, jen se u multiclass a multilabel problému mění v závislosti na tom, co chceme ve výsledku hodnotit.
+Confusion Matrix
+Accuracy
+Precision and Recall
+F1-score
+MCC
+AU-ROC
+Knihovna Sklearn má k dispozici funkci sklearn.metrics.classification_report, která vytvoří přehlednou tabulku základních klasifikačních metrik.
+ 
+###Confusion Matrix (matice záměn)
+Nejpřehlednější ukazatel, jak dobře model predikuje třídy datových bodů. Počty originálních versus předpovězených tříd dat jsou vyneseny do přehledné tabulky. Následující hodnocení zařazení datových bodů je využíváno pro výpočty všech uvedených metrik.
+Matice zamen here pro binarni i multiclass
+·       Pravdivě pozitivní (TP – true positive) označuje, kolik bodů model správně přiřadil do pozitivní třídy
+·       Pravdivě negativní (TN – true negative) označuje, kolik bodů model správně přiřadil do negativní třídy
+·       Falešně pozitivní (FP – false positive) znamená, kolik bodů model NEsprávně přiřadil do pozitivní třídy
+·       Falešně negativní (FN – false negative) označuje, kolik bodů model NEsprávně přiřadil do negativní třídy
+ 
+###Accuracy (přesnost)
+Nejjednodušší a nejpochopitelnější metrika, která vyjadřuje poměr počtu správných předpovědí k celkovému počtu předpovědí, vynásobená stem.
+Zároveň může být velmi zavádějící, pokud máme k dispozici nevyvážený dataset z hlediska počtu prvků v každé třídě. V podstatě se dá říct, že jde o vypovídající metriku pouze v případě, pracujeme-li s vyváženým datasetem o dvou třídách.
+ 
+###Precision a Recall (shodnost a senzitivita)
+Precision je poměr správně předpovězených pozitivních a celkového počtu pozitivně předpovězených bodů. Neboli poměr pozitivních z celkového počtu pozitivně předpovězených.
+Recall je poměr správně předpovězených pozitivních ke všem skutečně pozitivním bodům.
+Tyto dvě metriky je dobré reportovat dohromady, doplňují se. Zatímco Precision se zaměřuje na chybu typu I – klasifikace pozitivních dat jako negativní, tak Recall na chybu typu II, chybná klasifikace bodů jako pozitivních. Precision a Recall jsou propojené, pokud se budeme snažit zvyšovat jednu z metrik, bude se zároveň snižovat druhá a obráceně.
+###F1-score
+F1-score je kombinací výše uvedených metrik:
+Vysoké F1-score je výsledkem vysokých hodnot Precision a Recallu; říká, že model je dobře vyladěný z pohledu obou uvedených hodnot. Toto skóre je velmi informativní v případě nevybalancovaných tříd použitého datasetu.
+###MCC-score
+Matthewsův korelační koeficient pracuje se všemi čtyřmi hodnotami v matici záměn, a tak je výbornou metrikou pro nevybalancovaný dataset.
+ 
+###AUC-ROC  
+AUC je zkratka pro Area under curve (plocha pod křivkou); tou křivkou je ROC (receiver operator characteristic). Historii ROC si můžete přečíst zde: odkaz. Jde o pravděpodobnostní křivku, ukazující performanci modelu při různých prahových hodnotách. Na x osu vynáší FPR a na y osu TPR. Tato metrika ukazuje, jak moc je model schopný separovat třídy v datasetu. Hodnota AUC rovná jedné říká, že model dovede třídy skvěle rozlišovat; hodnota 0.5 ukazuje, že model nemá žádné predikční schopnosti a jeho výstupní snaha klasifikovat datové body je stejná, jako bychom si házeli korunou, tedy zcela náhodná.
+ 
+Poznámka
+Příklad: Dataset o sto molekulách má 10 aktivních molekul a 90 neaktivních, klasifikátor označí všechny molekuly jako neaktivní.
+Accuracy = 90 %
+Recall = 0
+MCC = 0
+ 
+TPR (True Positive Rate) / Recall /Sensitivity
+Specificity
+FPR  =  1 – specificity
+ 
+Test na covid, který by vždy vyšel pozitivní, má vysokou sensitivitu (všechny pozitivní skutečně odhalil: žádný pozitivní neunikl), ale špatnou specificitu (mnoho falešně pozitivních). Kdyby vůbec nefungoval a o všech řekl, že jsou negativní, má vysokou specificitu (všechny negativní odhalil: žádný negativní nebyl diagnostikován pozitivně), ale špatnou sensitivitu (málo pozitivních výsledků).
+Sensitivita (recall; true positive rate): kolik opravdu pozitivních bylo označeno za pozitivní (málo neodhalených pozitivních = málo false negatives)
+Specificita (true negative rate): kolik opravdu negativních bylo označeno za negativní (málo falešných pozitiv; poměr správně označených negativních a všech skutečně negativních).
+Shodnost (precision): kolik opravdu pozitivních je mezi pozitivními výsledky (málo falešných pozitiv; poměr správně označených pozitivních a všech označených pozitivních)
+ 
+##Nevybalancovaná data – vhodné metriky
+Pokud není možné třidy datasetu vybalancovat, je potřeba volit vhodné metriky pro ohodnocení výkonu klasifikátoru. Rozhodně se vyhněte accuracy v základní podobě. Sklearn knihovna nabízí funkci balanced_accuracy_score, které bere ohled na zastoupení tříd v datech.
+https://scikit-learn.org/stable/modules/model_evaluation.html#balanced-accuracy-score
+
+Dobře si s tímto typem dat poradí i ROC-AUC metrika, případně je dobré reportovat i PR-AUC (precision recall – area under curve), protože tato metrika se soustředí na výkon modelu vzhledem k minoritní třídě.  Další dobrou metrikou pro případ nevybalancovaných dat je Matthewsův korelační koeficient – MCC.
+Odkazy:
+https://www.worldscientific.com/doi/abs/10.1142/S0218001409007326
+https://www.sciencedirect.com/science/article/abs/pii/S0167865508002687
+ 
+##Regresní metriky
+Regresní modely mají spojitý vstup – číslo s plovoucí desetinnou čárkou a spojitý výstup. Metriky v tomto typu problému měří vzdálenost mezi vstupní a výstupní (předpovídanou) hodnotou. I regresní metriky mají svoje plusy a mínusy, a proto je dobré počítat a analyzovat více metrik pro jeden model.
+Mean Absolute Error (MAE)
+Mean Squared Error (MSE)
+Root Mean Squared Error (RMSE)
+R² (R-Squared).
+ 
+###MAE
+Střední absolutní chyba je průměr rozdílu mezi originálními a předpovídanými hodnotami. Je robustnější vůči odlehlým hodnotám než například MSE, protože každá chyba přímo úměrně ovlivňuje výslednou hodnotu. Robustnost v tomto případě odkazuje na schopnost metriky reagovat na šum nebo odlehlé hodnoty jen malou změnou. Výhodou je, že MAE přímo odpovídá jednotkám původní proměnné a je snadno interpretovatelná.
+ 
+###MSE
+Střední kvadratická chyba je snad nejpoužívanější metrikou pro regresní problematiku. Zjišťuje průměrný čtvercový rozdíl mezi původní hodnotou a předpovězenou hodnotou. Tím, že každou odchylku mocní na druhou, dochází k nadhodnocení chyb, což se obzvláště projeví ve výsledném skóre, pokud data obsahují odlehlé hodnoty. Výsledná hodnota MSE je v jednotkách na druhou, což je pro interpretaci nepříliš intuitivní, například v případě předpovědi teploty pro následující týden by chyba odpovídala stupňům Celsia na druhou.
+ 
+###RMSE
+Chyba střední kvadratické hodnoty odpovídá druhé odmocnině průměru čtvercových rozdílů mezi originální hodnotou a hodnotou předpovězenou regresním modelem. Penalizace chyb je o něco méně dramatická než v případě MSE. Také pracuje s původními jednotkami cílové proměnné, a tak je tato metrika snáze interpretovatelná.
+ 
+###R2 koeficient determinace
+Tento koeficient se snaží odpovědět na otázku, jaký poměr z celkové variability cílové proměnné je vysvětleno variabilitou regresní přímky. Neboli po vynásobení stem říká procento variance dat, vysvětlené modelem.
+¨
+Čím více se blíží hodnota R2 k jedné, tím lépe si regresní model vede. Interval hodnot R2 je (-∞,1>, minus nekonečno z levé strany, protože poměr sumy čtverců chyb regresní přímky a celkové sumy čtverců chyb může být vyšší než jedna.
+ 
+###Výběr regresní metriky
+Volba nejlepší metriky závisí na datech; pokud data obsahují velké množství odlehlých hodnot, je lepší pracovat s MAE, v ostatních případech je RMSE velmi dobrou metrikou. Matematicky MAE odpovídá Manhattanově normě (l1 norma), zatímco RMSE odpovídá Euklidově normě (l2 norma). Čím vyšší je index normy, tím více reaguje na velké hodnoty chyb a zanedbává chyby malé. https://en.wikipedia.org/wiki/Norm_(mathematics)
+https://forecasters.org/wp-content/uploads/gravity_forms/7-621289a708af3e7af65a7cd487aee6eb/2015/07/Kolassa_Stephan_ISF2015.pdf
+ 
+##Porovnávání výsledných metrik modelů
+Pro každý model je dobré reportovat více metrik a grafů. Nejlepší model by měl být vybrán statistickým porovnáním výsledků z násobné křížové validace modelů jedné metriky. Obecně se dá říct, že neuděláme chybu, pokud pro klasifikační modely zvolíme F1-score nebo MCC. Pro regresní modely pak MSE nebo RMSE. Více o křížové validaci v příslušné kapitole.
+Volba vhodné metriky ale také závisí na tom, co s modelem plánujeme dělat, jaká třída dat nás zajímá, a především jaký typ chyby je pro nás důležitý.
+Ve fázi přípravy modelu je výkon modelu potřeba hodnotit jak na základě testovacích, tak i trénovacích dat, abychom byli schopni odhalit přetrénovanost modelů nebo případný dataleak. V případě situace, kdy trénovací data mají vysoké výsledné metriky a testovací nízké, jde o přetrénování (overfitting) modelu na trénovacím datasetu, model není schopný generalizovat, jen se naučil opakovat cílovou proměnnou pro trénovací data. K uvedenému problému může docházet například u neuronových sítí, nebo u algoritmu náhodných stromů, když je hloubka stromu příliš velká (hyperparametr max tree depth).
+Obrázek trénovaci a testovaci křivky:  Chyba na trénovacích datech klesá rychleji než na testovacích.
+Pokud je chyba na trénovacích datech nižší než na testovacích datech, jde většinou o problém úniku informace o datech z testovací množiny do trénovací množiny. K tomu může dojít mnoha způsoby, na vině je například nevhodná technika normalizace dat, příliš podobná data v obou množinách – například v případě chemických dat může jít o 3D konformace jednoho ligandu. Je potřeba vytvořit trénovací a testovací dataset s rozmyslem, a pokud jsou výsledná testovací skóre podezřele dobrá, znovu zkontrolovat, jak byla data rozdělena.
+ 
+##Vizualizace výsledků
+Základní knihovna matplotlib obsahuje všechny potřebné plotovací funkce. Na této knihovně je postavený vizualizační balíček seaborn, případně grafické funkce v knihovně pandas.
+Data z použitých metrik je rozhodně potřeba ukládat do tabulek, aby bylo možné je porovnávat. V takovém zápisu je jednoduché se vyznat, může sloužit jako paměť předchozích experimentů a data se dají snadno prezentovat. Dalším důležitým krokem je vizualizace výsledků, k tomu slouží grafové zobrazení, metriky se snadno dají okem porovnávat ve sloupcovém grafu. Fantazii se zde meze nekladou, důležitá je přehlednost; z grafu by mělo být na první pohled jasné, který model nebo algoritmus si vedl nejlépe. Pro představu, jak si vedou regresní modely, je dobré vynést do grafu originální hodnoty a hodnoty předpovězené. Čím blíž jsou vynesené body diagonále, vedené z levého dolního rohu grafu do pravého horního rohu, tím lépe si regresní model v předpovědích vede.
+ 
+

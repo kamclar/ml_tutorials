@@ -32,33 +32,18 @@ export const SidebarData = [
         cName: 'sub-nav'
       },
       {
-        title: 'Classification vs Regression',
+        title: 'Metrics',
         path: '/tutorials/t3',
         icon: <IoIcons.IoIosPaper />
       },
       {
-        title: 'Data Preprocessing',
+        title: 'Models',
         path: '/tutorials/t4',
         icon: <IoIcons.IoIosPaper />
       },
       {
-        title: 'Models',
-        path: '/tutorials/t5',
-        icon: <IoIcons.IoIosPaper />
-      },
-      {
-        title: 'Metrics',
-        path: '/tutorials/t6',
-        icon: <IoIcons.IoIosPaper />
-      },
-      {
-        title: 'Applicability Domain',
-        path: '/tutorials/t7',
-        icon: <IoIcons.IoIosPaper />
-      },
-      {
         title: 'Results Presentation',
-        path: '/tutorials/t8',
+        path: '/tutorials/t5',
         icon: <IoIcons.IoIosPaper />
       }
     ]

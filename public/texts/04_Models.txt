@@ -1,0 +1,71 @@
+#Modelování
+Výběr vhodného typu modelu záleží na úloze a datech, typicky je třeba vyzkoušet různé algoritmy a porovnáním vybrat pro danou úlohu ten nejlepší. Knihovna sklearn nabízí mnoho klasifikačních i regresních modelů, ze kterých je možné volit. Pokud se rozhodnete pro neuronové sítě, pak může posloužit knihovna keras. Pro pokročilejší techniky je možné volit knihovny tensorflow, pytorch, případně knihovnu Huggingface, která nabízí připravená řešení pro NLP úlohy.
+Ať už zvolíte jakýkoliv typ modelu, mějte na paměti, že kvalita výsledků nemůže předčit kvalitu vstupních dat, neboli platí „trash in trash out“.
+ 
+##Základní model (Baseline model)
+Základní model je jednoduchý model, sloužící jako reference k porovnání výsledků. Model, který nastaví základní – minimální hodnoty metrik. Jsou různé přístupy, jak takový model vytvořit, záleží na typu dat i úlohy. My základní modely rozdělíme na dvě skupiny:
+1)      Heuristické základní modely
+2)      Základní modely strojového učení
+Heuristické modely vychází z nějakých jednoduchých pravidel. V případě klasifikace může model předvídat nejvíce zastoupenou třídu (zero rule algorithm). Další možností je předvídat cílovou hodnotu náhodně (random prediction), případně je možné realizovat předpověď jako průměrnou hodnotu nebo medián dat. Knihovna sklearn pro tyto účely obsahuje funkci dummy classifier a dummy regressor.
+Jako základní model můžeme použít jakýkoliv jednoduchý algoritmus metod strojového učení. Může jít například o lineární regresi, nebo logistickou regresi. Případně náhodný les v základním nastavení bez odladěných hyperparametrů. Jaký použijete základní model, si promyslete podle toho, čeho chcete dosáhnout a jaký typ úlohy řešíte. Měl by to být vůbec první model, který při řešení projektu vytvoříte.
+ 
+##Rozdělení datasetu na trénovací a testovací skupiny (train-test split)
+Abychom byli schopni posoudit a porovnat kvalitu natrénovaného modelu a vybrat nejlepší model, potřebujeme mít způsob ověřit, jak je model schopný generalizovat na neviděných datech. Nejjednodušší cestou k otestování výkonu modelů je rozdělit data na trénovací a testovací množinu.  Typicky se data dělí v poměru 70:30 (někdy se uvádí poměr 67:33, nebo 80:20); pokud je dat k dispozici málo, je možné volit split v jiném poměru. Důležité je, aby data v obou množinách dobře statisticky reprezentovala obsaženou informaci. Proto je třeba data pro klasifikační úlohy takzvaně stratifikovat, zajistit, aby v trénovací i testovací množině byly zastoupeny datové třídy ve stejném poměru. Dále je důležité zajistit, aby se data z trénovací množiny nedostala do testovací; pokud by se tak stalo, došlo by k úniku informace do trénovací množiny (data leak). Hodnoty testovacích metrik by byly vynikající, protože model by pracoval s daty, které viděl při trénování. Někdy se může stát, že jednotlivé datové body jsou si velmi podobné a jejich použití v obou množinách by způsobilo právě takovou situaci. Proto data řádně prozkoumejte a v případně vhodně rozdělte pomocí shlukovacích metod.
+K rozdělení dat na trénovací a testovací množinu a jejich případnou stratifikaci můžeme opět používat knihovnu sklearn, která obsahuje funkci train test split. Její výhodou je, že je možné nastavit random seed na konkrétní hodnotu, a tak mít stejné rozdělení dat pro každý experiment, jinak by bylo nutné data po rozdělení uložit do souborů zvlášť a pro další použití načítat tyto soubory z disku. Pro porovnání výkonu různých modelů mezi sebou je samozřejmě nutné, aby trénovací i testovací množiny byly identické.
+
+###Výsledky na trénovacích, testovacích datech a možné problémy
+K posouzení výkonu modelů je potřeba pracovat jak s trénovacími výsledky, tak testovacími. V podstatě můžou nastat následující tři situace:
+1)      Výsledné testovací hodnoty jsou na testovacích datech lepší než na trénovacích.  Taková situace většinou ukazuje únik informace z trénovacích do testovacích dat.
+2)      Rozdíl hodnot metrik mezi testovacími a trénovacími daty je příliš velký. Zřejmě došlo k přetrénování modelu (overfitting) a model není schopný generalizovat.
+3)      Hodnoty metrik obou množin jsou si blízké, s tím, že hodnoty na testovací množině jsou o něco nižší. To je ideální stav, ke kterému směřujeme.
+Uvedené případy se týkají stavu, kdy data v testovací i trénovací skupině pochází z jednoho balíku dat. Může nastat situace, že si připravíme data úplně z jiného zdroje, abychom ověřili, jak velké generalizace jsou natrénované modely schopny. Tehdy je možné, aby rozdíl mezi trénovacími výsledky a výsledky na této nové množině byl poměrně velký, a přitom model nebyl přetrénovaný.
+ 
+##Křížová validace
+Můžete si udělat experiment, kdy budete generovat různé datové splity a sledovat metriky. Zjistíte, že výsledné hodnoty metrik nebudou identické, budou jiné pro každý natrénovaný model na odlišném splitu. To je problém v situaci, kdy se snažíte vybrat nejlepší model, ale jeho výsledná performance je vlastně závislá na tom, jak jste data rozdělili. Z toho důvodu je jedním z nezbytných kroků v procesu modelování.
+Možností křížové validace je několik.
+o   K-fold cross validace
+o   5X2 křížová validace
+o   Leave one out cross validace
+o   Repeated random Test-train split
+ 
+###K-násobná křížová validace (k-fold cross validace)
+Asi nejpoužívanější varianta křížové variace, kde k-fold značí počet opakování rozdělení trénovacího setu na trénovací a validační podmnožiny (k se většinou rovná deseti, k=10). Trénovací set je rozdělen na k testovacích podmnožin, zbytek dat je použit na trénování modelu, validační set pak na hlášení metriky. Trénování se opakuje k-krát. Nejlépe je tato metoda pochopitelná z obrázku. K-fold cv se používá k odstranění variance výsledných hodnot metrik, vzniklé náhodným výběrem dat do trénovací a testovací množiny. Výsledky k-fold cv jsou pak zprůměrovaná hodnota ze všech k běhů a jejich std.
+Tento postup je velmi vhodný, když chceme vybrat nejlepší model pro nějakou produkční úlohu. Porovnáváme pak modely pomocí výsledků křížové validace a máme větší jistotu, že vybraný natrénovaný model si skutečně vede lépe, a to ne díky náhodnému výběru trénovacích dat.
+ 
+###5X2 křížová validace
+Speciální případ křížové validace, vhodný především pro malé datasety a klasifikační problematiku. Trénovací dataset je rozdělen v pětinásobném cyklu na dvě části (pokaždé jiný random seed). Trpí problémem, že data se v testovací množině v jednotlivých cyklech opakují. Nicméně v případě, kdy dataset je malý nebo obsahuje nevyvážené třídy, vytváří dostatečně velkou testovací množinu, oproti klasické desetinásobné křížové validace.
+ 
+###Leave one out cross validace (LOOCV)
+Metoda křížové validace vhodná pro malé datasety; pro větší datasety se nehodí, protože s narůstající velikostí datasetu se stává výpočetně náročnou. Jde vlastně o speciální případ k-fold cv, kde k je rovno počtu datových bodů v datasetu. Chyba modelu se ověřuje na datovém bodu, který je před začátkem trénování odložen stranou jako testovací množina. Finální skóre je pak průměr přes k provedených trénovacích cyklů, výsledek je opět v podobě mean +- std.
+ 
+###Repeated random Test-train split
+Varianta cv, kde k rozdělení dat dochází na celém balíku dat, ne jenom na trénovací množině, podobně jako při k-fold cv. Problém této metody je, že rozdělení skupin dělá náhodně, a tak se data v testovací množině opakují, čímž se do výsledků vnáší nadbytečnost.
+ 
+##Bias-variance trade-off
+O tomto tématu bylo napsáno spoustu textu, zde bychom jen chtěli zmínit další implikace. Ve výsledných hodnotách použitých metrik se skrývají tři proměnné:
+Variance – vyjadřuje schopnost modelu generalizovat; model s vysokou variancí je přetrénovaný model, který má skvělé výsledky na trénovacím setu, ale špatné na testovacím
+Šum – neporazitelný aspekt každého datasetu; odráží kvalitu reprezentace dat a nepřesnost obsaženou v dané datové množině
+Bias – zkreslení (zjednodušení) vzniklé tím, že model nebyl schopen zachytit komplexitu dat
+Varianci i bias jste schopni sledovat na výsledných hodnotách metrik trénovacího a testovacího datasetu a model či data vhodně měnit tak, aby bylo dosaženo jak nízké variance, tak zkreslení (bias). Pokud zvolíte vhodný postup při přípravě modelu, dosáhnete ideálního poměru biasu a variance a šum je hlavní nepřítel, se kterým se v modelování budete potýkat. Odstranění šumu nikdy nebude úplné, ale je možné snížit ho vhodnou přípravou dat a výběrem vhodné datové reprezentace, která pro danou úlohu zachytí informace, vedoucí ke kvalitním predikcím.
+Je dobré si uvědomit, že bias a variance souvisí s komplexitou modelu; čím více parametrů model má, tím je komplexnější. Například hyperparametr hloubka větví ve stromech v algoritmu náhodného lesa může zvětšovat počet vnitřních parametrů nebo množství neuronů a vrstev v neuronové síti. Zajímavým fenoménem je takzvaný „double descent“, když naroste množství parametrů modelu tak, že p ~ n (interpolation treshold), kde n je množství trénovacích datových bodů, tak dochází k dosažení maxima generalizační chyby a od této chvíle chyba začne klesat.
+https://mltheory.org/deep.pdf
+ 
+##Výběr nejlepších hyperparametrů (hyperparameter tuning)
+Modely mají hyperparemetry, jejichž vhodným výběrem je možné měnit komplexitu modelu tak, aby odpovídala potřebám daného datového setu. Toto nastavení se dělá ještě před trénováním a stejně jako při výběru nejlepšího modelu je vhodné používat křížovou validaci. Výběr probíhá pomocí různých technik prohledávání celého prostoru kombinací použitých hyperparametrů. Zmíníme dvě hlavní varianty, založené na odlišných algoritmech.
+·         Náhodné hledání – náhodně vybírá z prostoru hyperparametrů (Randomized search)
+·         Bayesovká optimalizace – pravděpodobnostní přístup pro nalezení nejlepší kombinace hyperparametrů
+Je možné použít následující knihovny:
+https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html
+https://scikit-optimize.github.io/stable/
+
+K hledání hp dochází na trénovací množině, testovací data musí zůstat stranou do doby, než bude prováděno výsledné testování natrénovaného modelu. Pomocí zmíněných knihoven je možné najít nejlepší hyperparametry pro daný algoritmus a datový set. Je dobré si tyto hyperparametry uložit, abychom se k nim v případě potřeby mohli vrátit a také abychom mohli reportovat, jak byl model nastaven. Teprve model, který má vybrané nejlepší kombinace hyperparametrů, je možné použít pro trénování a přípravu na produkční úlohy. Můžete si zkusit, jak vybraný algoritmus funguje v základním nastavení a jak po výběru hp. Také nezapomínejte, že v případě použití neuronových sítí je i „early stopping“ hyperparametrem a je třeba použít pouze trénovací data, ověření tedy probíhá na validační množině – podmnožině trénovacích dat.
+Porovnání výkonu modelů pomocí statistického testování
+Posledním krokem ve výběru srovnání výkonu modelů je statistické testování. Pro případ porovnání výsledků dvou modelů volíme párové testy, většinou ale testujeme více modelů, pak je potřeba nejdříve provést omnibus test, který pomůže zamítnout nebo přijmout nulovou hypotézu, a to, že výsledné hodnoty metrik se neliší. Čili že všechny modely podávají stejný výkon. Po zamítnutí nulové hypotézy následuje krok párového testování všech modelů, u kterých chceme potvrdit signifikanci, tedy především toho modelu, který má nejlepší skóre. V případě porovnávání výsledných hodnot vybraných metrik pro jednotlivé modely ale musíme pracovat s několika nepříjemnými skutečnosti. Hlavní z nich je předpoklad nezávislosti dat; jelikož trénovací a testovací dataset je pro všechny modely identický, tak tento předpoklad není splněn. Druhý předpoklad je, že data mají normální rozdělení, to se v případě desetinásobné křížové validace špatně dokazuje. Proto je třeba volit testy, které jsou schopné s takovými daty pracovat.
+knihovna: 
+scikit-posthocs — scikit-posthocs 0.7.0 documentation:
+https://scikit-posthocs.readthedocs.io/en/latest/
+https://github.com/webermarcolivier/statannot
+
+https://arxiv.org/abs/1811.12808
+ 
+

@@ -1,0 +1,52 @@
+#Příprava chemických dat
+Chemická data je třeba vyčistit a připravit na vstup do modelů, stejně jako jakákoliv jiná. Mimo chemoinformatiku je jeden datový bod popsán několika charakteristikami a cílovou proměnou, tou může být třída, do které datový bod patří, pak mluvíme o klasifikaci, nebo číslo s plovoucí desetinnou čárkou, a pak může jít o regresní úlohu. Existuje mnoho tutoriálů, jak tyto popisné charakteristiky upravit a filtrovat (feature selection), abychom měli k dispozici dataset bez šumu a výsledné modelování poskytovalo nejlepší možné výsledky. Jakým způsobem ale pracovat s chemickými daty? Data jsou často uložena v podobě zápisu SMILES, ten poskytuje popis molekuly, kterému chybí 3D informace, tu ovšem často k ničemu nepotřebujeme. Někdy můžeme mít k dispozici i tuto informaci, pak bude soubor uložen s 3D koordináty atomů, například v souboru mol, pdb, sdf. Tato data je potřeba předzpracovat stejně, jako v případě nechemických dat. Proto jsme dělali exploraci dat, teď víme, jak data vypadají, a na základě toho můžeme data filtrovat. Cílová proměnná, tzv. label či target, poslouží například k odstranění odlehlých bodů z dat. Datové body je potřeba fitrovat i z pohledu molekul. Existují hotové postupy/protokoly; jedním z nich je postup vytvořený pomocí knihovny RDKit, která obsahuje vhodné funkce ke kontrole 1) validity struktury, 2) standardizaci a 3) odstranění solí. Podrobnosti jsou popsány v tomto článku:
+
+An open source chemical structure curation pipeline using RDKit
+https://jcheminf.biomedcentral.com/articles/10.1186/s13321-020-00456-1
+ 
+##Vektorová reprezentace chemických dat
+Ve chvíli, kdy máme k dispozici vyčištěná data, můžeme postoupit k dalšímu kroku, a to jak molekuly zapsané jazykem SMILES, případně reprezentované jako 3D struktury, prezentovat machine learningovému algoritmu. Nejčastěji si s touto úlohou poradíme pomocí knihovny RDKit, která načítá uvedená data do svého datového objektu, z něhož je možné generovat vhodné zápisy. Základní návod je k dispozici zde:
+ 
+Getting Started with the RDKit in Python
+ 
+První volbou zápisu molekuly do počítačem čitelného vektoru je některý z fingerprintů: ECFP/FCFP nebo Morganovy fingerprinty. Je možné použít i MACCs keys, případně vstupní vektor složit z deskriptorů, kterých RDKit nabízí nepřeberné množství.
+Existují ale i další možnosti, typicky pro deep learningové metody je možné využít přímo zápisu SMILES a pracovat s daty jako se sekvencemi. To je vhodné například pro neuronové sítě typu LSTM. Další typ neuronové sítě, se kterým se můžete setkat, je architektura Transformer. Tento typ sítí používá ke zpracování dat Tokenizéry, které sekvenci převedou na seznam tokenů, interpretovaných integerem. Existují i další metody, které se z chemického zápisu dat snaží extrahovat informace a přeložit je do počítačového zápisu:
+1.    SLN - SYBYL line notation (paper), AMBIT-SLN Java free implementation
+https://pubs.acs.org/doi/10.1021/ci7004687, https://zenodo.org/record/4452208, http://ambit.sourceforge.net/
+2.    DeepSMILES - paper, GitHub
+https://chemrxiv.org/articles/preprint/DeepSMILES_An_Adaptation_of_SMILES_for_Use_in_Machine-Learning_of_Chemical_Structures/7097960/1, https://github.com/baoilleach/deepsmiles
+3.    SELFIES (paper), GitHub
+https://iopscience.iop.org/article/10.1088/2632-2153/aba947, https://github.com/aspuru-guzik-group/selfies
+ 
+##Transformace dat
+Někdy je vhodné vstupní vektor dat transformovat, důvodem může být například potřeba redukce dimenzionality. Můžeme použít PCA, lineární transformaci. Jde o lineární transformaci, lze ji použít nejen pro zobrazení Prvních komponent k popsání datového prostoru, ale i přímo jako vstupní vektor do vybraného modelu. Výhodou je, že odstraněním koncových komponent dochází k minimální ztrátě variance dat a tím pádem informace v datech obsažené. Někdy může být pro model jednodušší pracovat s takto předzpracovanými daty.
+##Regularizace dat
+Normalizace, standardizace, log transformace atd
+Tady pozor na to, jak se to dělá. Je třeba transformovat test set fit_transform a test set jen transformovat bez fitu, jinak by se model dozvěděl mean a std i pro test data. Taky je mozne pouzivat metodu pipeline ve sklearnu, ta se o vsechno postara sama.
+
+##Nevyvážený poměr tříd
+Pro modely je velmi obtížné učit se z nevybalancovaných dat, mnohdy se za minimální ztráty přesnosti, naučí všechno klasifikovat jako nejvíce zastoupenou třídu. Je několik metod, jak s tímto problémem naložit. Nejlepší samozřejmě je, obstarat si dost datových bodů ke všem třídám. Nabízejí se různé databáze, ze kterých je možné stáhnout nová data, nebo generátory molekul podle podobnosti. Pokud nabohacení datasetu z jiných zdrojů není možné, volíme metody podvzorkování (undersampling) nebo nadvzorkování (oversampling), tyto metody aplikujeme pouze na trénovací data.
+Základní čtyři metody jsou:
+1)      Random oversampling
+Jde o metodu, kdy pro méně zastoupenou třídu náhodnou metodou vygenerujeme nová data z původních dat
+https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.RandomOverSampler.html
+2)      Metoda SMOTE
+Jde o metodu, která dokáže vygenerovat syntetická data. Pro chemická data, je SMOTE vhodné používat na transformovaných datech, například pomocí PCA.
+https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html
+3)      Random undersampling
+Tato metoda náhodně vybere data z majoritní třídy a odstraní je. To je ovšem možné si dovolit pouze tehdy, je-li k dispozici dostatečné množství dat.
+https://imbalanced-learn.org/stable/references/generated/imblearn.under_sampling.RandomUnderSampler.html
+4)      Under-Sampling Using NearMiss
+Metoda používající KNN algoritmus k odstranění nejvíce zastoupených dat.
+https://imbalanced-learn.org/stable/references/generated/imblearn.under_sampling.NearMiss.html
+Je možné metody kombinovat, výslednou performanci modelu nakonec ověříme na testovacích datech, na které tyto metody nebyly použity.
+ 
+##Ukládání předzpracovaných dat
+Pokud je připravovaný dataset malý, je možné uložit vyfiltrovaná data v původním zápisu, typicky SMILES stringu pro každou molekulu. Data můžeme organizovat v tabulce pomocí knihovny pandas, kde jsou ve sloupci SMILES zápisy molekul a v dalších sloupcích jejich cílové proměnné případně různé identifikátory. Takovou tabulku uložíme do souboru csv a při každém načtení znovu přepočítáme vstupní vektor. Pokud by přegenerování mělo trvat příliš dlouho, uložíme data na disk předpočítaná. K tomu lze použít různé algoritmy, které umí serializovat data:
+Pickle
+https://wiki.python.org/moin/UsingPickle
+Joblib
+https://joblib.readthedocs.io/en/latest/why.html
+Feather format
+https://arrow.apache.org/docs/python/feather.html
+

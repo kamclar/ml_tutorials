@@ -18,14 +18,12 @@
 .titleStyle {
   font-size: 2em;
   text-align: center;
-  padding-bottom: 3em;
-  
+  padding-bottom: 3em;  
 }
 
 .playerStyle {
   display: block;
   padding-bottom: 3em;
-
 }
 
 .textStyle {
@@ -47,6 +45,14 @@
   font-family: 'Lato', sans-serif;
   font-weight: bold;
   font-size: 20px;  
+  text-align: left;
+  padding-bottom: 2em;
+}
+
+.textStyleHeader3 {
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+  font-size: 18px;  
   text-align: left;
   padding-bottom: 2em;
 }
@@ -129,7 +135,6 @@
 
 .codeContainer {
   display: -webkit-flex;
-
 }
 
 button:hover {

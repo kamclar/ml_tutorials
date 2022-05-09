@@ -21,9 +21,6 @@ function App() {
         <Route exact path='/tutorials/t4' component={() => <T1 i='3'/>} />
         <Route exact path='/tutorials/t5' component={() => <T1 i='4'/>} />
         <Route exact path='/tutorials/t6' component={() => <T1 i='5'/>} />
-        <Route exact path='/tutorials/t7' component={() => <T1 i='6'/>} />
-        <Route exact path='/tutorials/t8' component={() => <T1 i='7'/>} />
-        <Route exact path='/tutorials/t9' component={() => <T1 i='8'/>} />
         <Route path='/about' exact component={About} />
         <Route/>
 

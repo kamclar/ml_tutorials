@@ -43,6 +43,12 @@ class TextFileReader extends React.Component {
             {item.substr(1)} 
             </div>
             )
+          if (item.startsWith('###'))
+            return (              
+              <div className="textStyleHeader3">                
+              {item.substr(3)} 
+              </div>
+              )
           if (item.startsWith('##'))
             return (              
               <div className="textStyleHeader2">                
