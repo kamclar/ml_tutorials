@@ -12,7 +12,7 @@ export const Lectures =
         video: 'videos/video1.avi',
         text: '/texts/02_DataPreprocessing.txt',
         fig: '',
-        code: '',
+        code: 'https://kamclar.github.io/jl/retro/notebooks/index.html?path=pyolite/02_Data_preprocessing.ipynb',
     },
     {
         name: 'Metrics',
